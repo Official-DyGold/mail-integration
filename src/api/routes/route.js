@@ -52,4 +52,21 @@ router.get('/', integrationsController.getAllIntegrations);
  */
 router.get('/lists', integrationsController.getIntegrationLists);
 
+/**
+ * @swagger
+ * /api/integrations/esp/contacts:
+ *   get:
+ *     summary: Retrieve contacts for a specific integration
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of contacts or subscribers.
+ */
+router.get('/contacts', integrationsController.getIntegrationContacts);
+
 module.exports = router;
