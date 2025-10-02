@@ -24,33 +24,33 @@ const integrationsController = require('../controllers/controller');
  */
 router.post('/', integrationsController.createIntegration);
 
-/**
- * @swagger
- * /api/integrations/esp:
- *   get:
- *     summary: Retrieve all integrations
- *     responses:
- *       200:
- *         description: A list of integrations.
- */
-router.get('/', integrationsController.getAllIntegrations);
+// /**
+//  * @swagger
+//  * /api/integrations/esp:
+//  *   get:
+//  *     summary: Retrieve all integrations
+//  *     responses:
+//  *       200:
+//  *         description: A list of integrations.
+//  */
+// router.get('/', integrationsController.getAllIntegrations);
 
-/**
- * @swagger
- * /api/integrations/esp/lists:
- *   get:
- *     summary: Retrieve lists for a specific integration
- *     parameters:
- *       - in: query
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: A list of campaigns or lists.
- */
-router.get('/lists', integrationsController.getIntegrationLists);
+// /**
+//  * @swagger
+//  * /api/integrations/esp/lists:
+//  *   get:
+//  *     summary: Retrieve lists for a specific integration
+//  *     parameters:
+//  *       - in: query
+//  *         name: id
+//  *         required: true
+//  *         schema:
+//  *           type: string
+//  *     responses:
+//  *       200:
+//  *         description: A list of campaigns or lists.
+//  */
+// router.get('/lists', integrationsController.getIntegrationLists);
 
 /**
  * @swagger
