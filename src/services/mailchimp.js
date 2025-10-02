@@ -101,7 +101,47 @@ async function getLists(apiKey) {
   }
 }
 
+/**
+ * Get contacts (members) from all lists - MVP: first page of each list
+ * GET https://{dc}.api.mailchimp.com/3.0/lists/{list_id}/members?count=100
+ */
+async function getContacts(apiKey) {
+  const lists = await getLists(apiKey);
+  const dc = extractDataCenter(apiKey);
+  if (!dc) {
+    const err = new Error('Invalid Mailchimp API key format (missing data center)');
+    err.isInvalidCredentials = true;
+    throw err;
+  }
+
+  const allContacts = [];
+  for (const list of lists) {
+    const url = `https://${dc}.api.mailchimp.com/3.0/lists/${list.id}/members?count=100`;
+    try {
+      const resp = await axios.get(url, {
+        auth: { username: 'anystring', password: apiKey },
+        timeout: 10000
+      });
+
+      if (resp.data && resp.data.members) {
+        const contacts = resp.data.members.map((m) => ({
+          id: m.id,
+          email: m.email_address,
+          name: m.full_name,
+          status: m.status,
+        }));
+        allContacts.push(...contacts);
+      }
+    } catch (error) {
+      // Log and continue to next list if one fails
+      console.error(`Failed to fetch members for list ${list.id}`, error);
+    }
+  }
+  return allContacts;
+}
+
 module.exports = {
   validateApiKey,
-  getLists
+  getLists,
+  getContacts
 };

@@ -10,9 +10,14 @@ const adapter = new JSONFile(file);
 const db = new Low(adapter, { integrations: [] });
 
 async function initDB() {
-  // Read data from file, creating the file if it doesn't exist
-  await db.read();
-  // Write data to file to ensure it's created on first run
+  try {
+    await db.read();
+  } catch (e) {
+    console.error("Error reading database, re-initializing...", e);
+    // If the file is corrupt or invalid, re-initialize it with default data
+    db.data = { integrations: [] };
+  }
+  // Always write the file to ensure it's created or repaired
   await db.write();
 }
 

@@ -80,7 +80,44 @@ async function getCampaigns(apiKey) {
   }
 }
 
+/**
+ * Get contacts - MVP: first page only
+ * GET /v3/contacts?limit=100
+ */
+async function getContacts(apiKey) {
+  try {
+    const resp = await axios.get(`${BASE}/contacts?limit=100`, {
+      headers: authHeader(apiKey),
+      timeout: 10000
+    });
+
+    if (Array.isArray(resp.data)) {
+      return resp.data.map((c) => ({
+        id: c.contactId,
+        email: c.email,
+        name: c.name,
+      }));
+    }
+    return [];
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status === 401 || error.response.status === 403) {
+        const err = new Error('Invalid GetResponse credentials');
+        err.isInvalidCredentials = true;
+        throw err;
+      }
+      if (error.response.status === 429) {
+        const err = new Error('GetResponse rate limited');
+        err.isRateLimit = true;
+        throw err;
+      }
+    }
+    throw error;
+  }
+}
+
 module.exports = {
   validateApiKey,
-  getCampaigns
+  getCampaigns,
+  getContacts
 };
